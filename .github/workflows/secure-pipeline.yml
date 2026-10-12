@@ -1,0 +1,27 @@
+
+name: Secure Pipeline Secrets
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  secure-job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Use secret securely
+        env:
+          APP_PASSWORD: ${{ secrets.APP_PASSWORD }}
+        run: |
+          if [ -n "$APP_PASSWORD" ]; then
+            echo "Secret is configured"
+          else
+            echo "Secret is missing"
+            exit 1
+          fi
